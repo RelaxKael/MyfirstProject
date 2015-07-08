@@ -13,56 +13,6 @@
 
     return nil;
 }
-//从c++命名方案转换成OC命名方案
-//已知user_ID 赋值到userID
-//已知pictures_thumb_small 赋值到picturesThumbSmall
-//- (NSString *)convertCNameSpaceToObjectCNameSpace:(NSString *)gnamespace
-//{
-//    
-//    NSString *objNameSpaceString = gnamespace;
-//    NSRange sepRange = [objNameSpaceString rangeOfString:@"_"];
-//    
-//    while (sepRange.length!=0) {
-//        if(sepRange.location<objNameSpaceString.length)
-//        {
-//            NSString *mark = [objNameSpaceString substringWithRange:NSMakeRange(sepRange.location, 2)];
-//            NSString *lastMark = [[mark substringWithRange:NSMakeRange(mark.length-1, 1)] uppercaseString];
-//            objNameSpaceString   = [objNameSpaceString stringByReplacingOccurrencesOfString:mark withString:lastMark];
-//            sepRange = [objNameSpaceString rangeOfString:@"_"];
-//        }
-//        else
-//        {
-//            break;
-//        }
-//    }
-//    return objNameSpaceString;
-//}
-//从OC命名方案转换成C++命名方案
-//已知userID 赋值到user_id
-//已知picturesThumbSmall 赋值到pictures_thumb_small
-//- (NSString *)convertOCNameSpaceToCNameSpace:(NSString *)ocnamespace
-//{
-//    NSString *regexStr = @"[A-Z]+";
-//    NSString *ocNameSpaceStr = ocnamespace;
-//    NSRegularExpression* regex = [[NSRegularExpression alloc]
-//                                  initWithPattern:regexStr
-//                                  options:NSRegularExpressionDotMatchesLineSeparators
-//                                  error:nil];
-//    NSArray* chunks = [regex matchesInString:ocNameSpaceStr options:0 range:NSMakeRange(0, [ocNameSpaceStr length])];
-//    NSUInteger checkCount = 0;
-//    for(int i = 0 ; i<chunks.count;i++)
-//    {
-//        NSTextCheckingResult *currentResult = [chunks objectAtIndex:i];
-//        
-//        //匹配到大写字母
-//        NSString *mark = [ocNameSpaceStr substringWithRange:NSMakeRange(currentResult.range.location+checkCount, currentResult.range.length)];
-//        
-//        NSString *convertMark = [NSString stringWithFormat:@"_%@",[mark lowercaseString]];
-//        ocNameSpaceStr = [ocNameSpaceStr stringByReplacingCharactersInRange:NSMakeRange(currentResult.range.location+checkCount, currentResult.range.length) withString:convertMark];
-//        checkCount++;
-//    }
-//    return ocNameSpaceStr;
-//}
 //这个方法用于替换掉一些与命名规则冲突的情况如userID 转换成user_id 但是项目中的key值是user_ID
 - (NSString *)checkTheKeyDataSource:(NSString *)key
 {
@@ -241,5 +191,18 @@
         return temp2;
     }
     return Attributes;
+}
++(BOOL)resolveInstanceMethod:(SEL)sel
+{
+    
+    if(sel==@selector(getSetEntityClassWithKey:))
+    {
+        class_addMethod([self class], sel, imp_implementationWithBlock(^(id self, NSString *key){
+        
+            NSLog(@"解析失败,请在%@类中实现%@方法。",NSStringFromClass([self class]),NSStringFromSelector(sel));
+    
+        }), "v@*");
+    }
+    return YES;
 }
 @end
