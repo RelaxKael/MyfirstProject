@@ -11,7 +11,7 @@
 @interface BaseModel : NSObject
 #define defaultArrayIvalKey @"goalArray"
 
-
+#define EnityNumberProperty(a)  @property (nonatomic , copy)NSNumber *a
 #define EnityIntergerProperty(a)  @property (nonatomic , assign)NSInteger a
 #define EnityStringProperty(a)  @property (nonatomic , strong)NSString *a
 #define EnityArrayProperty(a)  @property (nonatomic , strong)NSArray *a
